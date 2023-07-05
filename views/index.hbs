@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Products List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>   
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Ops</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr id="{{id}}">
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+                <td>{{produtCategory}}</td>          
+                <td>{{price}}</td>
+                <td id="stock-{{id}}">
+                    {{!-- {{#if stock}}
+                        {{stock}}
+                    {{else}}
+                        Out of Stock
+                    {{/if}} --}}
+                    {{stock}}
+                </td>
+                <td id="btn-{{id}}" class="{{#if stock}}in-stock{{else}}out-of-stock{{/if}}">
+                    {{#if stock}}
+                    <form action="/decrement/{{id}}" method="get">
+                        <button type="submit">Buy</button>
+                    </form>
+                    {{else}}
+                    <span class="out-of-stock">Out Of Stock</span>
+                    {{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>      
+    </table>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.on('stock-update', (product) => {
+            const row = document.getElementById(`${product.id}`);
+            if(row) {
+                const stockCell = document.getElementById('stock-'+product.id);
+                if (stockCell){   
+                    stockCell.innerHTML = product.stock;
+                    stockCell.classList.toggle('in-stock', product.stock > 0);
+                    stockCell.classList.toggle('out-of-stock', product.stock == 0);
+                }
+                const btnCell = document. getElementById('btn-'+product.id)
+                if (btnCell){
+                    if (product.stock == 0){
+                        btnCell.innerHTML = `<span class="out-of-stock">Buy</span>`
+                    }else{
+                        btnCell.innerHTML = `<form action="/decrement/{{id}}" method="get">
+                        <button type="submit">Buy</button>
+                    </form>`
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
