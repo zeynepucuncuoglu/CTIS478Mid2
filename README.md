@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a simple web application for a product catalog. It allows users to view a list of products, buy items, and see real-time updates on stock changes. The application is built using Node.js, Express.js, Handlebars.js, and Socket.io.
+This is a simple web application for a product catalog. It allows users to view a list of products, buy items, and see real-time updates on stock changes. The application is built using Node.js, Express.js and Socket.io.
 
 ## Features
 
